@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brankas Rahasia Ayang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(circle, #1a1c2c 0%, #0a0b14 100%);
+            /* Overflow diubah agar bisa scroll saat pesan muncul */
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        /* Sembunyikan scrollbar untuk tampilan lebih bersih (Opsional) */
+        body::-webkit-scrollbar {
+            width: 5px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.3);
+            border-radius: 10px;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-text {
+            text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
+        }
+        .keypad-btn:active {
+            transform: scale(0.95);
+            background: rgba(0, 210, 255, 0.2);
+        }
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+        }
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 50;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <audio id="romanticMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
+        
+        <div id="vault-screen" class="w-full max-w-md transition-all duration-700">
+            <div class="glass-morphism rounded-3xl p-8 shadow-2xl border-t border-blue-400/30">
+                <div class="text-center mb-6">
+                    <h2 class="text-cyan-400 font-bold tracking-[0.2em] text-xl uppercase mb-1">Brankas Rahasia</h2>
+                    <div id="status-text" class="text-xs text-gray-400 uppercase tracking-widest">Status: Terkunci</div>
+                </div>
+
+                <div class="bg-black/40 rounded-lg p-4 mb-8 flex justify-center space-x-4">
+                    <div id="dot-1" class="h-3 w-3 rounded-full bg-gray-700"></div>
+                    <div id="dot-2" class="h-3 w-3 rounded-full bg-gray-700"></div>
+                    <div id="dot-3" class="h-3 w-3 rounded-full bg-gray-700"></div>
+                    <div id="dot-4" class="h-3 w-3 rounded-full bg-gray-700"></div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <button onclick="pressKey('1')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">1</button>
+                    <button onclick="pressKey('2')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">2</button>
+                    <button onclick="pressKey('3')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">3</button>
+                    <button onclick="pressKey('4')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">4</button>
+                    <button onclick="pressKey('5')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">5</button>
+                    <button onclick="pressKey('6')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">6</button>
+                    <button onclick="pressKey('7')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">7</button>
+                    <button onclick="pressKey('8')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">8</button>
+                    <button onclick="pressKey('9')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">9</button>
+                    <button onclick="clearPin()" class="text-red-400 text-sm font-bold uppercase tracking-tighter">Hapus</button>
+                    <button onclick="pressKey('0')" class="keypad-btn glass-morphism h-16 rounded-xl text-2xl font-bold flex items-center justify-center">0</button>
+                    <button onclick="submitPin()" class="text-cyan-400 text-sm font-bold uppercase tracking-tighter">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="message-screen" class="hidden w-full max-w-5xl grid md:grid-cols-2 gap-12 items-start py-10">
+            <div class="relative h-[500px] flex items-center justify-center order-2 md:order-1">
+                <div class="polaroid absolute top-0 left-5 md:left-10 rotate-[-10deg]">
+                    <img src="image copy 2.png" alt="us" class="w-40 h-40 object-cover mb-2 grayscale hover:grayscale-0 transition-all">
+                    <p class="text-black text-xs font-bold text-center">Dont away for me</p>
+                </div>
+                <div class="polaroid absolute bottom-20 left-10 md:left-20 rotate-[5deg]">
+                    <img src="image copy.png" alt="us" class="w-40 h-40 object-cover mb-2 grayscale hover:grayscale-0 transition-all">
+                    <p class="text-black text-xs font-bold text-center">It's Afgan Girl❤️</p>
+                </div>
+                <div class="polaroid absolute top-20 right-5 md:right-10 rotate-[-5deg]">
+                    <img src="image.png" alt="us" class="w-40 h-40 object-cover mb-2 grayscale hover:grayscale-0 transition-all">
+                    <p class="text-black text-xs font-bold text-center">Happy Birthday Ma Luv🥰</p>
+                </div>
+            </div>
+
+            <div class="border-2 border-pink-500/50 rounded-xl p-6 md:p-8 bg-black/40 relative backdrop-blur-sm order-1 md:order-2">
+                <div class="absolute -top-4 right-4 bg-pink-600 text-[10px] px-2 py-1 rounded-md uppercase font-bold tracking-widest shadow-lg shadow-pink-500/50">
+                    Dibaca ya sayanggg
+                </div>
+                <h1 class="text-2xl font-bold text-pink-500 mb-6 tracking-tighter">MISSION: HAPPY LEVEL UP DAY!</h1>
+                
+                <div class="space-y-4 text-gray-300 text-sm leading-relaxed">
+                    <p><span class="text-pink-400 font-bold">>> TARGET:</span> MY FAVORITE PERSON</p>
+                    <p><span class="text-pink-400 font-bold">>> STATUS:</span> UDAH TUA YA KAMUUU HUUUU</p>
+                    
+                    <p class="mt-4">
+                        Kalo kamu baca ini, selamat! Kamu udah berhasil ngelewatin security system hati aku (apa sih).
+                        Ini bukan data rahasia negara kok, tapi isinya jauh lebih penting.
+                    </p>
+                    <p>
+                        Isinya bukti valid no debat kalo kita tuh pasangan paling lucu sedunia. Makasih ya udah jadi support system terbaik, partner kulineran, Chef pribadi nya aku dan keluargaa, dann tempat sambat paling nyaman 24/7.
+                    </p>
+                    <div class="text-lg font-bold text-white italic mt-6 border-l-4 border-pink-500 pl-4 py-2">
+                        "Happy Level Up Day, Cantik! Berhasil buka brankas ini berarti kamu sudah resmi jadi pemegang kunci hatiku selamanya (eaaa). Makasih ya sudah jadi partner kulineran, tempat sambat paling nyaman, dan alasan aku semangat setiap hari. Tetap jadi wanita hebat yang aku kenal, ya!. emm satu lagi deh hehe Semoga di usia baru ini, kebahagiaan kamu berlipat ganda, dan semoga aku tetap jadi orang yang beruntung untuk terus merayakannya walaupun tidak di sampingmu yaaa. I love you to the moon and back!"
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-4 border-t border-pink-500/30 flex justify-between items-end">
+                    <div class="text-[8px] text-gray-500 font-mono">
+                        SECURE ID: HAPPY BIRTHDAY SAYANG ACUU<br>
+                        ENCRYPTION: HAPPY WITH YOU FOREVER
+                    </div>
+                    <div class="text-pink-500 font-bold text-xs italic">
+                        FROM Afgan nya Lina
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPin = "";
+        const CORRECT_PIN = "0504"; 
+        const music = document.getElementById('romanticMusic');
+
+        function pressKey(num) {
+            if (currentPin.length < 4) {
+                currentPin += num;
+                updateDots();
+            }
+        }
+
+        function clearPin() {
+            currentPin = "";
+            updateDots();
+        }
+
+        function updateDots() {
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i <= currentPin.length) {
+                    dot.classList.remove('bg-gray-700');
+                    dot.classList.add('bg-cyan-400', 'shadow-[0_0_8px_#22d3ee]');
+                } else {
+                    dot.classList.remove('bg-cyan-400', 'shadow-[0_0_8px_#22d3ee]');
+                    dot.classList.add('bg-gray-700');
+                }
+            }
+        }
+
+        function submitPin() {
+            const status = document.getElementById('status-text');
+            if (currentPin === CORRECT_PIN) {
+                music.play().catch(error => {
+                    console.log("Autoplay blocked, waiting for interaction.");
+                });
+
+                status.innerText = "AKSES DITERIMA";
+                status.classList.remove('text-gray-400');
+                status.classList.add('text-green-400');
+                
+                setTimeout(() => {
+                    document.getElementById('vault-screen').classList.add('opacity-0', 'scale-90');
+                    setTimeout(() => {
+                        document.getElementById('vault-screen').classList.add('hidden');
+                        const msgScreen = document.getElementById('message-screen');
+                        msgScreen.classList.remove('hidden');
+                        msgScreen.classList.add('animate-fade-in');
+                    }, 500);
+                }, 800);
+            } else {
+                status.innerText = "PIN SALAH, COBA LAGI!";
+                status.classList.add('text-red-500');
+                currentPin = "";
+                updateDots();
+                setTimeout(() => {
+                    status.innerText = "Status: Terkunci";
+                    status.classList.remove('text-red-500');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
